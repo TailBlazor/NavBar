@@ -2,6 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <PackageId>TailBlazor.NavBar</PackageId>
+    <RootNamespace>TailBlazor.NavBar</RootNamespace>
+    <Version>0.0.1</Version>
+    <Authors>Rogerio Ribeiro</Authors>
+    <IsPackage>true</IsPackage>
+    <PackageTags>Blazor; TailBlazorcss; TailBlazor css; tailwind; tailwindcss; NavBar; navbar; Nav; Nav Bar;</PackageTags>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/TailBlazor/NavBar</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/TailBlazor/NavBar</RepositoryUrl>
+    <Description>A Blazor navbar component based off TailWindCss. It has the bare minimum styles to function with the option to add your own classes. It's built so it can be fully customizable and reusable.</Description>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   
@@ -11,6 +27,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\TailBlazor\NavBar\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\..\TailBlazor\NavBar\LICENSE" Pack="true" PackagePath="">
+      <LinkBase>assets</LinkBase>
+    </None>
   </ItemGroup>
 
 </Project>

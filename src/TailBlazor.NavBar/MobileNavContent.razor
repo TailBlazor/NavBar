@@ -1,0 +1,39 @@
+﻿@ChildContent
+
+@code {
+    [Parameter]
+    public List<NavItem> Items { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Inject]
+    NavigationManager _navManager { get; set; }
+
+    string relativePath = "";
+
+    protected override void OnInitialized()
+    {
+        OnLocationChanged(null, null);
+
+        // hook to OnLocationChanged() so we can change the active class for the element
+        _navManager.LocationChanged += OnLocationChanged;
+
+        foreach(var navItem in Items)
+        {
+            ChildContent = Helpers.BuildNavItemFragment(navItem, relativePath);
+        }
+    }
+
+    /// <summary>
+    /// A listener when the location has changed,
+    /// sets the relative path state variable to change the active class for the element on the nav bar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        relativePath = _navManager.ToBaseRelativePath(_navManager.Uri);
+        StateHasChanged();
+    }
+}

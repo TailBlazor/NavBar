@@ -20,49 +20,14 @@
                     </button>
                 }
             </div>
-            <div class="@(string.IsNullOrEmpty(LeftItemsContainerClass) ? "flex-1 flex items-center justify-center sm:items-stretch sm:justify-start" : LeftItemsContainerClass)">
-                @LeftItems
-            </div>
-            <div class="@(string.IsNullOrEmpty(CenterItemsContainerClass) ? "hidden flex-1 items-center justify-center sm:flex sm:items-stretch sm:justify-center" : CenterItemsContainerClass)">
-                @CenterItems
-            </div>
-            <div class="@(string.IsNullOrEmpty(RightItemsContainerClass) ? "hidden flex-1 items-center justify-center sm:flex sm:items-stretch sm:justify-end" : RightItemsContainerClass)">
-                @RightItems
-            </div>
+            @ChildContent
         </div>
     </div>
 
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="@(mobileMenuOpen ? "block" : "hidden")" id="mobile-menu">
         <div class="px-2 pt-2 pb-3 space-y-1">
-            @if (MobileContent != null)
-            {
-                @MobileContent
-            }
-            else
-            {
-                @MobileLeftItems
-
-                @if (MobileCenterItems != null)
-                {
-                    @if (LeftItems != null)
-                    {
-                        <hr />
-                    }
-
-                    @MobileCenterItems
-                }
-
-                @if (MobileRightItems != null)
-                {
-                    @if (MobileLeftItems != null || MobileCenterItems != null)
-                    {
-                        <hr />
-                    }
-
-                    @MobileRightItems
-                }
-            }
+            @MobileContent
         </div>
     </div>
 </nav>

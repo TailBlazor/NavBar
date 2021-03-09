@@ -8,10 +8,19 @@ namespace TailBlazor.NavBar
     /// </summary>
     public class NavLogoInformation
     {
+        public NavLogoPosition Position { get; set; }
         public string FullScreenUrl { get; set; }
         public string MobileScreenUrl { get; set; }
         public string Alt { get; set; }
         public string Class { get; set; }
+
+        /// <summary>
+        /// set the default position to left
+        /// </summary>
+        public NavLogoInformation()
+        {
+            this.Position = NavLogoPosition.Left;
+        }
     }
 
     /// <summary>
