@@ -64,6 +64,7 @@ Parameter | Default Value
 `IconStyle` | `IconStyle.Outline`
 `EnableComments` | `false`
 
+<br/><br/>
 Width, Height, and StrokeWidth all take an int.
 
 class takes any tailwind text colour you've added to your project: `text-blue-500`. The fill is erased when building the SVG and this is put at a class instead. Because this is set as a class inside the `class` variable you can add additional classes to further customize the icon.
