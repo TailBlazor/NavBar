@@ -1,4 +1,4 @@
-# TailBlazor.HeroIcons
+# TailBlazor.NavBar
 
 Blazor NavBar is a basic yet customizable NavBar component for Tailwindcss
 
