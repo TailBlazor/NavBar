@@ -1,0 +1,120 @@
+﻿<div class="@(string.IsNullOrEmpty(Class) ? "flex-1 flex items-center justify-center sm:items-stretch sm:justify-start" : Class)">
+    @ChildContent
+</div>
+
+@code {
+    #region parameters
+    /// <summary>
+    /// The left items container class.
+    /// Default class: flex-1 flex items-center justify-center sm:items-stretch sm:justify-start
+    /// </summary>
+    [Parameter]
+    public string Class { get; set; }
+
+    /// <summary>
+    /// The logo information, such as fullwidthsizeurl, mobilesizeurl, alt, class.
+    /// </summary>
+    [Parameter]
+    public NavLogoInformation LogoInformation { get; set; }
+
+    /// <summary>
+    /// A list of nav items to be placed.
+    /// This will automatically place a list of items in the navbar without having to do any custom work.
+    /// Note: If you end up doing custom work, it will override this.
+    /// </summary>
+    [Parameter]
+    public List<NavItem> Items { get; set; }
+
+    /// <summary>
+    /// The content for the left navbar, if this is not null it will replace your items.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    #endregion
+
+    #region injection services
+    [Inject]
+    NavigationManager _navManager { get; set; }
+    #endregion
+
+    #region variables
+    // String Variables
+    string relativePath = "";
+    #endregion
+
+    #region intializers
+    protected override void OnInitialized()
+    {
+        OnLocationChanged(null, null);
+
+        // hook to OnLocationChanged() so we can change the active class for the element
+        _navManager.LocationChanged += OnLocationChanged;
+
+        if (ChildContent == null)
+            BuildNavItems(Items);
+    }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        var items = parameters.GetValueOrDefault<List<NavItem>>("Items");
+        var childContent = parameters.GetValueOrDefault<RenderFragment>("ChildContent");
+
+        if ((items != null || (items?.Count() != 0 && items?.Count() != null)) &&
+            childContent != null)
+            throw new WarningException("You have provided both the Items and the ChildContent, please provide one of them. If you are confused as to the difference, please visit: https://github.com/TailBlazor/NavBar");
+
+        return base.SetParametersAsync(parameters);
+    }
+    #endregion
+
+    #region private functions
+    /// <summary>
+    /// Build the renderfragment for the left of the nav bar
+    /// </summary>
+    /// <param name="navItems">a list of nav items</param>
+    void BuildNavItems(List<NavItem> navItems)
+    {
+        if (LogoInformation != null)
+        {
+            RenderFragment navLogo = Helpers.BuildNavLogoFragment(LogoInformation);
+            ChildContent += navLogo;
+        }
+
+        if(navItems != null)
+        {
+            RenderFragment item = i =>
+            {
+                i.OpenElement(0, "div");
+                i.AddAttribute(1, "class", "hidden sm:block sm:ml-6");
+                i.OpenElement(2, "div");
+                i.AddAttribute(3, "class", "flex space-x-4");
+
+                foreach (var navItem in navItems)
+                {
+                    var buildNavItem = Helpers.BuildNavItemFragment(navItem, relativePath);
+                    i.AddContent(4, buildNavItem);
+                }
+
+                i.CloseElement();
+                i.CloseElement();
+            };
+
+            ChildContent += item;
+        }
+
+        StateHasChanged();
+    }
+
+    /// <summary>
+    /// A listener when the location has changed,
+    /// sets the relative path state variable to change the active class for the element on the nav bar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        relativePath = _navManager.ToBaseRelativePath(_navManager.Uri);
+        StateHasChanged();
+    }
+    #endregion
+}

@@ -1,0 +1,95 @@
+﻿<!-- Mobile menu, show/hide based on menu state. -->
+<div class="@(mobileMenuOpen ? "block" : "hidden") @(Class)" id="mobile-menu">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    #region parameters
+    /// <summary>
+    /// Container class
+    /// </summary>
+    public string Class { get; set; }
+
+    /// <summary>
+    /// A list of nav items to be placed.
+    /// This will automatically place a list of items in the navbar without having to do any custom work.
+    /// Note: If you end up doing custom work, it will override this.
+    /// </summary>
+    [Parameter]
+    public List<NavItem> Items { get; set; }
+
+    /// <summary>
+    /// The mobile content, this will show up when in mobile view and you have clicked the hamburger menu to open.
+    /// Note: If you have supplied a [Parameter] NavItems, this will override all the content that was created for the mobile view.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    #endregion
+
+    #region injection services
+    [Inject]
+    NavigationManager _navManager { get; set; }
+    #endregion
+
+    #region variables
+    // String Variables
+    string relativePath = "";
+
+    // Boolean Variables
+    bool mobileMenuOpen = false;
+    #endregion
+
+    #region intializers
+    protected override void OnInitialized()
+    {
+        OnLocationChanged(null, null);
+
+        // hook to OnLocationChanged() so we can change the active class for the element
+        _navManager.LocationChanged += OnLocationChanged;
+
+        foreach (var navItem in Items)
+        {
+            ChildContent = Helpers.BuildNavItemFragment(navItem, relativePath);
+        }
+    }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        var items = parameters.GetValueOrDefault<List<NavItem>>("Items");
+        var childContent = parameters.GetValueOrDefault<RenderFragment>("ChildContent");
+
+        if ((items != null || (items?.Count() != 0 && items?.Count() != null)) &&
+            childContent != null)
+            throw new WarningException("You have provided both the Items and the ChildContent, please provide one of them. If you are confused as to the difference, please visit: https://github.com/TailBlazor/NavBar");
+
+        return base.SetParametersAsync(parameters);
+    }
+    #endregion
+
+    #region public functions
+    /// <summary>
+    /// Toggle the mobile menu when the user clicks the hamburger icon
+    /// </summary>
+    public void HamburgerClicked()
+    {
+        mobileMenuOpen = !mobileMenuOpen;
+        StateHasChanged();
+    }
+    #endregion
+
+    #region private functions
+    /// <summary>
+    /// A listener when the location has changed,
+    /// sets the relative path state variable to change the active class for the element on the nav bar
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        relativePath = _navManager.ToBaseRelativePath(_navManager.Uri);
+        StateHasChanged();
+    } 
+    #endregion
+}

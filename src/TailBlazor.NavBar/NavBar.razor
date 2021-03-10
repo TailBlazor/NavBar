@@ -1,33 +1,22 @@
-﻿<nav class="@(string.IsNullOrEmpty(NavContainerClass) ? "bg-blue-500 color-primary" : NavContainerClass)">
-    <div class="@(string.IsNullOrEmpty(MainDivContainerClass) ? $"{(!MaxWidthFull ? "max-w-7xl" : "")} mx-auto px-2 sm:px-6" : MainDivContainerClass)">
-        <div class="relative flex items-center justify-between h-16">
-            <div class="absolute inset-y-0 @(this.MobileMenuButtonPosition == MobileMenuButtonPosition.Left || this.MobileMenuButtonPosition == MobileMenuButtonPosition.Undefined ? "left-0" : "right-0") flex items-center sm:hidden">
-                <!-- Mobile menu button-->
-                @if (MobileMenuButtonContent != null)
-                {
-                    @MobileMenuButtonContent
-                }
-                else
-                {
-                    <button type="button" class="@(string.IsNullOrEmpty(MobileMenuButtonClass) ? "inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-blue-700 hover:bg-colorPrimaryHover focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" : MobileMenuButtonClass)" aria-controls="mobile-menu" aria-expanded="false" @onclick="@(() => HamburgerClicked())">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                }
-            </div>
-            @ChildContent
-        </div>
-    </div>
-
-    <!-- Mobile menu, show/hide based on menu state. -->
-    <div class="@(mobileMenuOpen ? "block" : "hidden")" id="mobile-menu">
-        <div class="px-2 pt-2 pb-3 space-y-1">
-            @MobileContent
-        </div>
-    </div>
+﻿<nav class="@(string.IsNullOrEmpty(Class) ? "bg-blue-500 color-primary" : Class)">
+    @ChildContent
 </nav>
+
+@code {
+    #region parameters
+    /// <summary>
+    /// The container class for the nav.
+    /// Default class: bg-blue-500 color-primary
+    /// Note: If color-primary is not defined, it will default to blue-500.
+    /// </summary>
+    [Parameter]
+    public string Class { get; set; }
+
+    /// <summary>
+    /// The items that will be placed on the left side of the nav.
+    /// Note: This will override any of the [Parameter] NavItems on the left position.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    #endregion
+}

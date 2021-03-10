@@ -1,0 +1,76 @@
+﻿<div class="@(string.IsNullOrEmpty(Class) ? $"{(!MaxWidthFull ? "max-w-7xl" : "w-full")} mx-auto px-2 sm:px-6" : Class)">
+    <div class="relative flex items-center justify-between h-16">
+        <div class="absolute inset-y-0 @(this.MobileMenuButtonPosition == MobileMenuButtonPosition.Left || this.MobileMenuButtonPosition == MobileMenuButtonPosition.Undefined ? "left-0" : "right-0") flex items-center sm:hidden">
+            <!-- Mobile menu button-->
+            @if (MobileMenuButtonContent != null)
+            {
+                @MobileMenuButtonContent
+            }
+            else
+            {
+                <button type="button" class="@(string.IsNullOrEmpty(MobileMenuButtonClass) ? "inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-blue-700 hover:bg-colorPrimaryHover focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" : MobileMenuButtonClass)" aria-controls="mobile-menu" aria-expanded="false" @onclick="@(() => MobileMenuButtonOnClick?.Invoke())">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            }
+        </div>
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    /// <summary>
+    /// The main div containter class. This is where you can set width, padding etc...
+    /// Default class: {(!MaxWidthFull ? "max-w-7xl" : "")} mx-auto px-2 sm:px-6
+    /// Note: If MaxWidthFull is true we do not set a max width here. Default is false.
+    /// </summary>
+    [Parameter]
+    public string Class { get; set; }
+
+    /// <summary>
+    /// The mobile menu button class, button will only show on mobile views.
+    /// Default class: inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-blue-700 hover:bg-colorPrimaryHover focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white
+    /// Note: If colorPrimaryHover is not declared in your tailwind.config.js we default to blue-700.
+    /// </summary>
+    [Parameter]
+    public string MobileMenuButtonClass { get; set; }
+
+    /// <summary>
+    /// A flag to check if the navbar will be full with or max-width of 80rem.
+    /// Default: False
+    /// </summary>
+    [Parameter]
+    public bool MaxWidthFull { get; set; }
+
+    /// <summary>
+    /// The mobile menu button position, either left or right. 
+    /// Default: MobileMenuButtonPosition.Left
+    /// </summary>
+    [Parameter]
+    public MobileMenuButtonPosition MobileMenuButtonPosition { get; set; }
+
+    /// <summary>
+    /// The mobile menu button content, in case you would like to change the buttons that are used for the hamburger menu.
+    /// Default: Hamburger on closed, X on open
+    /// </summary>
+    [Parameter]
+    public RenderFragment MobileMenuButtonContent { get; set; }
+
+    /// <summary>
+    /// The items that will be placed on the navbar.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// An action to open the mobile menu section.
+    /// Note: You will need to have MobileNavBarContent component for this to work.
+    /// </summary>
+    [Parameter]
+    public Action MobileMenuButtonOnClick { get; set; }
+}
