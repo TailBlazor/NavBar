@@ -62,7 +62,7 @@ Parameter | Default Value
 `StrokeWidth` | `2`
 `Class` | `text-black`
 `IconStyle` | `IconStyle.Outline`
-`EnableComments` | `false <br/> Test`
+`EnableComments` | `false` <br/> Test
 
 <br/><br/>
 Width, Height, and StrokeWidth all take an int.
