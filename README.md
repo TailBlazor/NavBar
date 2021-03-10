@@ -8,9 +8,9 @@ It has the ability to be a single section or multiple for easy customization.
 
 ![Nuget](https://img.shields.io/nuget/v/TailBlazor.HeroIcons.svg)
 
-![Demo](navbar_main.png)
+![Demo](navbar_main.PNG)
 
-![Demo](mobile_menu.png)
+![Demo](mobile_menu.PNG)
 
 # Getting Setup
 
