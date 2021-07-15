@@ -49,9 +49,11 @@
         // hook to OnLocationChanged() so we can change the active class for the element
         _navManager.LocationChanged += OnLocationChanged;
 
-        foreach (var navItem in Items)
-        {
-            ChildContent = Helpers.BuildNavItemFragment(navItem, relativePath);
+        if(Items != null) {
+            foreach (var navItem in Items)
+            {
+                ChildContent = Helpers.BuildNavItemFragment(navItem, relativePath);
+            }
         }
     }
 

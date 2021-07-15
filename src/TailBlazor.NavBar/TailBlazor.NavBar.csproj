@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>TailBlazor.NavBar</PackageId>
     <RootNamespace>TailBlazor.NavBar</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Rogerio Ribeiro</Authors>
     <IsPackage>true</IsPackage>
     <PackageTags>Blazor; TailBlazorcss; TailBlazor css; tailwind; tailwindcss; NavBar; navbar; Nav; Nav Bar;</PackageTags>
