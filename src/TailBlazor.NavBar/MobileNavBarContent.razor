@@ -1,5 +1,7 @@
-﻿<!-- Mobile menu, show/hide based on menu state. -->
-<div class="@(mobileMenuOpen ? "block" : "hidden") @(Class)" id="mobile-menu">
+﻿@implements IDisposable
+
+<!-- Mobile menu, show/hide based on menu state. -->
+<div class="@(mobileMenuOpen ? "block" : "hidden") @(Class) md:hidden" id="mobile-menu">
     <div class="px-2 pt-2 pb-3 space-y-1">
         @ChildContent
     </div>
@@ -31,6 +33,9 @@
     #region injection services
     [Inject]
     NavigationManager _navManager { get; set; }
+
+    [Inject]
+    IResizeListener _listener { get; set; }
     #endregion
 
     #region variables
@@ -39,6 +44,9 @@
 
     // Boolean Variables
     bool mobileMenuOpen = false;
+
+    // Model Variables
+    BrowserWindowSize browser = new BrowserWindowSize();
     #endregion
 
     #region intializers
@@ -54,6 +62,14 @@
             {
                 ChildContent = Helpers.BuildNavItemFragment(navItem, relativePath);
             }
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            _listener.OnResized += WindowResized;
         }
     }
 
@@ -92,6 +108,28 @@
     {
         relativePath = _navManager.ToBaseRelativePath(_navManager.Uri);
         StateHasChanged();
-    } 
+    }
+
+    void IDisposable.Dispose()
+    {
+        // Always use IDisposable in your component to unsubscribe from the event.
+        // Be a good citizen and leave things how you found them. 
+        // This way event handlers aren't called when nobody is listening.
+        _listener.OnResized -= WindowResized;
+    }
+
+    async void WindowResized(object _, BrowserWindowSize window)
+    {
+        browser = window;
+
+        // Check a media query to see if it was matched. We can do this at any time, but it's best to check on each resize
+        if(!await _listener.MatchMedia(Breakpoints.SmallDown))
+        {
+            mobileMenuOpen = false;
+        }
+
+        // We're outside of the component's lifecycle, be sure to let it know it has to re-render.
+        StateHasChanged();
+    }
     #endregion
 }

@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorPro.BlazorSize" Version="5.0.0-pre" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.3" />
   </ItemGroup>
 

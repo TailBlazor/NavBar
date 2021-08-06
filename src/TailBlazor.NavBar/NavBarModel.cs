@@ -12,6 +12,7 @@ namespace TailBlazor.NavBar
         public string MobileScreenUrl { get; set; }
         public string Alt { get; set; }
         public string Class { get; set; }
+        public string MobileClass { get; set; }
     }
 
     /// <summary>

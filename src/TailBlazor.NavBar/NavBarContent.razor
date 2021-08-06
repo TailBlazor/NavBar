@@ -1,4 +1,6 @@
-﻿<div class="@(string.IsNullOrEmpty(Class) ? $"{(!MaxWidthFull ? "max-w-7xl" : "w-full")} mx-auto px-2 sm:px-6" : Class)">
+﻿@implements IDisposable
+
+<div class="@(string.IsNullOrEmpty(Class) ? $"{(!MaxWidthFull ? "max-w-7xl" : "w-full")} mx-auto px-2 sm:px-6" : Class)">
     <div class="relative flex items-center justify-between h-16">
         <div class="absolute inset-y-0 @(this.MobileMenuButtonPosition == MobileMenuButtonPosition.Left || this.MobileMenuButtonPosition == MobileMenuButtonPosition.Undefined ? "left-0" : "right-0") flex items-center sm:hidden">
             <!-- Mobile menu button-->
@@ -8,12 +10,12 @@
             }
             else
             {
-                <button type="button" class="@(string.IsNullOrEmpty(MobileMenuButtonClass) ? "inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-blue-700 hover:bg-colorPrimaryHover focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" : MobileMenuButtonClass)" aria-controls="mobile-menu" aria-expanded="false" @onclick="@(() => MobileMenuButtonOnClick?.Invoke())">
+                <button type="button" class="@(string.IsNullOrEmpty(MobileMenuButtonClass) ? "inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-blue-700 hover:bg-colorPrimaryHover focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" : MobileMenuButtonClass)" aria-controls="mobile-menu" aria-expanded="false" @onclick="@(() => { mobileMenuButtonToggle = !mobileMenuButtonToggle;  MobileMenuButtonOnClick?.Invoke(); })">
                     <span class="sr-only">Open main menu</span>
-                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <svg class="@(mobileMenuButtonToggle ? "hidden" : "block") h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
-                    <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <svg class="@(mobileMenuButtonToggle ? "block" : "hidden") h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
@@ -73,4 +75,41 @@
     /// </summary>
     [Parameter]
     public Action MobileMenuButtonOnClick { get; set; }
+
+    [Inject]
+    IResizeListener _listener { get; set; }
+
+    bool mobileMenuButtonToggle = false;
+
+    BrowserWindowSize browser = new BrowserWindowSize();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _listener.OnResized += WindowResized;
+        }
+    }
+
+    void IDisposable.Dispose()
+    {
+        // Always use IDisposable in your component to unsubscribe from the event.
+        // Be a good citizen and leave things how you found them. 
+        // This way event handlers aren't called when nobody is listening.
+        _listener.OnResized -= WindowResized;
+    }
+
+    async void WindowResized(object _, BrowserWindowSize window)
+    {
+        browser = window;
+
+        // Check a media query to see if it was matched. We can do this at any time, but it's best to check on each resize
+        if (!await _listener.MatchMedia(Breakpoints.SmallDown))
+        {
+            mobileMenuButtonToggle = false;
+        }
+
+        // We're outside of the component's lifecycle, be sure to let it know it has to re-render.
+        StateHasChanged();
+    }
 }

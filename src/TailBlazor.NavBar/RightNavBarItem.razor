@@ -1,48 +1,54 @@
-﻿<div class="@(string.IsNullOrEmpty(Class) ? "hidden flex-1 items-center justify-center sm:flex sm:items-stretch sm:justify-end" : Class)">
+﻿<div class="@(string.IsNullOrEmpty(Class) ? "hidden flex-1 items-center justify-center md:flex md:items-stretch md:justify-end" : Class)">
     @ChildContent
 </div>
 
 @code {
-        #region parameters
-        /// <summary>
-        /// The right items container class.
-        /// Default class: hidden flex-1 items-center justify-center sm:flex sm:items-stretch sm:justify-end
-        /// </summary> 
-        [Parameter]
-        public string Class { get; set; }
+    #region parameters
+    /// <summary>
+    /// The right items container class.
+    /// Default class: hidden flex-1 items-center justify-center sm:flex sm:items-stretch sm:justify-end
+    /// </summary> 
+    [Parameter]
+    public string Class { get; set; }
 
-        /// <summary>
-        /// The logo information, such as fullwidthsizeurl, mobilesizeurl, alt, class.
-        /// </summary>
-        [Parameter]
-        public NavLogoInformation LogoInformation { get; set; }
+    /// <summary>
+    /// The logo information, such as fullwidthsizeurl, mobilesizeurl, alt, class.
+    /// </summary>
+    [Parameter]
+    public NavLogoInformation LogoInformation { get; set; }
 
-        /// <summary>
-        /// A list of nav items to be placed.
-        /// This will automatically place a list of items in the navbar without having to do any custom work.
-        /// Note: If you end up doing custom work, it will override this.
-        /// </summary>
-        [Parameter]
-        public List<NavItem> Items { get; set; }
+    /// <summary>
+    /// A list of nav items to be placed.
+    /// This will automatically place a list of items in the navbar without having to do any custom work.
+    /// Note: If you end up doing custom work, it will override this.
+    /// </summary>
+    [Parameter]
+    public List<NavItem> Items { get; set; }
 
-        /// <summary>
-        /// The content for the left navbar, if this is not null it will replace your items.
-        /// </summary>
-        [Parameter]
-        public RenderFragment ChildContent { get; set; }
-        #endregion
-
-        #region injection services
-        [Inject]
-        NavigationManager _navManager { get; set; }
-        #endregion
-
-        #region variables
-        // String Variables
-        string relativePath = "";
+    /// <summary>
+    /// The content for the left navbar, if this is not null it will replace your items.
+    /// </summary>
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
     #endregion
 
-        #region intializers
+    #region injection services
+    [Inject]
+    NavigationManager _navManager { get; set; }
+    #endregion
+
+    #region variables
+    // String Variables
+    string relativePath = "";
+
+    // Boolean Variables
+    bool smallScreen = false;
+
+    // Model Variables
+    BrowserWindowSize browser = new BrowserWindowSize();
+    #endregion
+
+    #region intializers
     protected override void OnInitialized()
     {
         OnLocationChanged(null, null);

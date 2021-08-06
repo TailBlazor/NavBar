@@ -73,13 +73,13 @@ namespace TailBlazor.NavBar
                 l.AddAttribute(1, "class", "flex-shrink-0 flex items-center");
                 
                 l.OpenElement(2, "img");
-                l.AddAttribute(3, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "block lg:hidden h-8 w-auto" : logoInfomation.Class);
+                l.AddAttribute(3, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "block lg:hidden h-8 w-auto" : $"{logoInfomation.Class}");
                 l.AddAttribute(4, "src", logoInfomation.MobileScreenUrl);
                 l.AddAttribute(5, "alt", logoInfomation.Alt);
                 l.CloseElement();
 
                 l.OpenElement(2, "img");
-                l.AddAttribute(3, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "hidden lg:block h-8 w-auto" : logoInfomation.Class);
+                l.AddAttribute(3, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "hidden lg:block h-8 w-auto" : $"{logoInfomation.MobileClass}");
                 l.AddAttribute(4, "src", logoInfomation.FullScreenUrl);
                 l.AddAttribute(5, "alt", logoInfomation.Alt);
                 l.CloseElement();
