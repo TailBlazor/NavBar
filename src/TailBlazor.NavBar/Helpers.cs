@@ -69,19 +69,20 @@ namespace TailBlazor.NavBar
         {
             RenderFragment logo = l =>
             {
-                l.OpenElement(0, "div");
+                l.OpenElement(0, "a");
                 l.AddAttribute(1, "class", "flex-shrink-0 flex items-center");
-                
-                l.OpenElement(2, "img");
-                l.AddAttribute(3, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "block lg:hidden h-8 w-auto" : $"{logoInfomation.Class}");
-                l.AddAttribute(4, "src", logoInfomation.MobileScreenUrl);
-                l.AddAttribute(5, "alt", logoInfomation.Alt);
+                l.AddAttribute(2, "href", "/");
+
+                l.OpenElement(3, "img");
+                l.AddAttribute(4, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "block lg:hidden h-8 w-auto" : $"{logoInfomation.Class}");
+                l.AddAttribute(5, "src", logoInfomation.MobileScreenUrl);
+                l.AddAttribute(6, "alt", logoInfomation.Alt);
                 l.CloseElement();
 
-                l.OpenElement(2, "img");
-                l.AddAttribute(3, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "hidden lg:block h-8 w-auto" : $"{logoInfomation.MobileClass}");
-                l.AddAttribute(4, "src", logoInfomation.FullScreenUrl);
-                l.AddAttribute(5, "alt", logoInfomation.Alt);
+                l.OpenElement(3, "img");
+                l.AddAttribute(4, "class", string.IsNullOrEmpty(logoInfomation.Class) ? "hidden lg:block h-8 w-auto" : $"{logoInfomation.MobileClass}");
+                l.AddAttribute(5, "src", logoInfomation.FullScreenUrl);
+                l.AddAttribute(6, "alt", logoInfomation.Alt);
                 l.CloseElement();
                 
                 l.CloseElement();
